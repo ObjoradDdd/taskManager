@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+    # Сервис для нашего MySQL сервера
+    db:
+        image: mysql:8.0  # Используем официальный образ MySQL версии 8.0
+        container_name: mysql_db_container # Даем контейнеру понятное имя
+        restart: always # Всегда перезапускать контейнер, если он упал
+        environment:
+            # --- ВОТ ЗДЕСЬ ВЫ ЗАДАЕТЕ ВСЕ ВАШИ НАСТРОЙКИ ---
+            MYSQL_ROOT_PASSWORD: super_secret_root_password  # Пароль для суперпользователя root
+            MYSQL_DATABASE: task_manager_db                 # Название базы данных, которая будет создана при старте
+            MYSQL_USER: task_manager_user                   # Имя пользователя, который будет создан
+            MYSQL_PASSWORD: user_password                   # Пароль для этого пользователя
+        ports:
+            # Пробрасываем порт 3306 из контейнера на порт 3307 на вашем компьютере.
+            # Это нужно, чтобы вы могли подключиться к БД с вашего ПК (например, через MySQL Workbench).
+            # Формат: <порт на вашем ПК>:<порт в контейнере>
+            - "3307:3306"
+        volumes:
+            # Сохраняем данные MySQL на вашем компьютере в специальном томе.
+            # Это гарантирует, что данные не пропадут при перезапуске контейнера.
+            - db_data:/var/lib/mysql
+
+    # Сервис для нашего Spring Boot приложения
+    app:
+        build: .  # Собирать образ из Dockerfile в текущей директории
+        container_name: spring_app_container # Имя контейнера
+        restart: on-failure # Перезапускать, только если была ошибка
+        depends_on:
+            - db  # Запускать этот контейнер только ПОСЛЕ того, как запустится сервис 'db'
+        ports:
+            # Пробрасываем порт 8080 из контейнера на порт 8080 на вашем компьютере.
+            - "8080:8080"
+        environment:
+
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_NAME=task_manager_db  # Такое же, как MYSQL_DATABASE
+            - DB_USER=task_manager_user # Такое же, как MYSQL_USER
+            - DB_PASSWORD=user_password  # Такое же, как MYSQL_PASSWORD
+
+
+volumes:
+    db_data:
