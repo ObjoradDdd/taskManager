@@ -1,0 +1,13 @@
+.container { padding: 20px; }
+.card { border: 1px solid #ccc; padding: 15px; border-radius: 6px; margin-bottom: 10px; }
+.link { color: #007bff; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+.form { display: flex; flex-direction: column; gap: 10px; max-width: 360px; }
+.input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+.btn { padding: 10px 12px; border-radius: 4px; cursor: pointer; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: #007bff; color: white; border: none; }
+.btn-success { background: #28a745; color: white; border: none; }
+.error-message { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #f5c6cb; }
+

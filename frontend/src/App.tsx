@@ -1,27 +1,24 @@
-import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
-import ProjectList from './pages/ProjectList'
-import ResultDetail from './pag'
-import MockProvider from './pages/MockProvider'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import SubjectsPage from "./pages/Subjects/SubjectsPage";
+import ProjectsPage from "./pages/Projects/ProjectsPage";
+import TasksPage from "./pages/Tasks/TasksPage";
+import LoginPage from "./pages/Auth/LoginPage";
+import RegisterPage from "./pages/Auth/RegisterPage";
+import Layout from "./components/Layout/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-export default function App(){
+export default function App() {
   return (
-    <div className="app-container">
-      <header className="header">
-        <h1>hello world</h1>
-        <nav>
-          <Link className="link" to="/">Projects</Link>
-          <Link className="link" to="/mock">Mock Data</Link>
-        </nav>
-      </header>
-
-      <main>
+    <BrowserRouter>
+      <Layout>
         <Routes>
-          <Route path="/" element={<ProjectList/>} />
-          <Route path="/result/:id" element={<ResultDetail/>} />
-          <Route path="/mock" element={<MockProvider/>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/subjects" element={<ProtectedRoute><SubjectsPage /></ProtectedRoute>} />
+          <Route path="/projects/:subjectId" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
+          <Route path="/project/:projectId/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
         </Routes>
-      </main>
-    </div>
-  )
+      </Layout>
+    </BrowserRouter>
+  );
 }
