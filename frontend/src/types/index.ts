@@ -4,21 +4,12 @@ export interface User {
   email?: string
 }
 
-export interface Task {
-  id: string
-  title: string
-  description?: string
-  dueDate?: string // ISO date
-  assignees?: string[] // user ids
-  completed?: boolean
-}
-
 export interface Result {
   id: string
   title: string
   description?: string
   dueDate?: string
-  tasks?: Task[]
+  results?: Result[]
   dependencies?: string[] // result ids that must be completed before this
   assignees?: string[]
 }

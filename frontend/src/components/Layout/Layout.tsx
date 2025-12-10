@@ -16,7 +16,8 @@ export default function Layout({ children }: { children: ReactNode }) {
     <div>
       <nav className="navbar">
         <div className="nav-left">
-          <Link className="nav-link" to="/subjects">Предметы</Link>
+          <Link className="nav-link" to="/admin_subjects">Предметы где я админ</Link>
+          <Link className="nav-link" to="/member_subjects">Предметы где я участник</Link>
         </div>
         <div className="nav-right">
           {isLoggedIn ? (

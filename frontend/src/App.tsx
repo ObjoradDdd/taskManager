@@ -1,24 +1,55 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import SubjectsPage from "./pages/Subjects/SubjectsPage";
-import ProjectsPage from "./pages/Projects/ProjectsPage";
-import TasksPage from "./pages/Tasks/TasksPage";
-import LoginPage from "./pages/Auth/LoginPage";
-import RegisterPage from "./pages/Auth/RegisterPage";
-import Layout from "./components/Layout/Layout";
+import { ModalProvider } from "./components/Modal/ModalProvider";
+
+
 import ProtectedRoute from "./components/ProtectedRoute";
+
+// AUTH
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+
+
+// SUBJECT
+import AdminSubjectsListPage from "./pages/subjects/AdminSubjectsListPage";
+import MemberSubjectsListPage from "./pages/subjects/MemberSubjectsListPage";
+import SubjectPage from "./pages/subjects/SubjectPage";
+
+
+// PROJECTS
+import ProjectPage from "./pages/projects/ProjectPage";
+import Layout from "./components/Layout/Layout";
+
+
+// TASKS
+
+
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <ModalProvider>
+      <BrowserRouter>
       <Layout>
         <Routes>
+          {/* AUTH */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/subjects" element={<ProtectedRoute><SubjectsPage /></ProtectedRoute>} />
-          <Route path="/projects/:subjectId" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
-          <Route path="/project/:projectId/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
+
+          {/* PAGES WITH LAYOUT */}
+            <Route path="/admin_subjects" element={<ProtectedRoute><AdminSubjectsListPage /> </ProtectedRoute>}/>
+            <Route path="/member_subjects" element={<ProtectedRoute><MemberSubjectsListPage /> </ProtectedRoute>}/>
+            <Route path="/subjects/:subjectId" element={<SubjectPage />} />
+            <Route
+              path="/subjects/:subjectId/projects/:projectId"
+              element={<ProjectPage />}
+            />
+          
+
+          {/* DEFAULT */}
+          <Route path="*" element={<Navigate to="/subjects" replace />} />
         </Routes>
-      </Layout>
-    </BrowserRouter>
+        </Layout>
+      </BrowserRouter>
+    </ModalProvider>
   );
 }
+

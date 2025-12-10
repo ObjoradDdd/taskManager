@@ -16,6 +16,12 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface User {
+  id: string | number;
+  email: string;
+  displayName: string;
+}
+
 export const AuthAPI = {
   login: (data: LoginRequest) => api("/auth/login", {
     method: "POST",

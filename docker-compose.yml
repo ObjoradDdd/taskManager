@@ -24,7 +24,7 @@ services:
 
     # Сервис для нашего Spring Boot приложения
     app:
-        build: .  # Собирать образ из Dockerfile в текущей директории
+        build: ./backend  # Собирать образ из Dockerfile в текущей директории
         container_name: spring_app_container # Имя контейнера
         restart: on-failure # Перезапускать, только если была ошибка
         depends_on:
@@ -40,6 +40,13 @@ services:
             - DB_USER=task_manager_user # Такое же, как MYSQL_USER
             - DB_PASSWORD=user_password  # Такое же, как MYSQL_PASSWORD
 
+    frontend:
+        build: ./frontend
+        ports:
+        - '5173:5173'
+        volumes:
+        - ./frontend:/app
+        - /app/node_modules
 
 volumes:
     db_data:
