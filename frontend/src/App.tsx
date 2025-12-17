@@ -45,7 +45,7 @@ export default function App() {
           
 
           {/* DEFAULT */}
-          <Route path="*" element={<Navigate to="/subjects" replace />} />
+          <Route path="*" element={<Navigate to="/admin_subjects" replace />} />
         </Routes>
         </Layout>
       </BrowserRouter>

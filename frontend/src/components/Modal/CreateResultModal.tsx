@@ -5,11 +5,10 @@ import { ResultsAPI } from "../../api/results";
 
 interface CreateResultModalProps {
   projectId: string;
-  subjectId: string;
-  onSuccess?: () => void;
+  onSuccess: () => void;
 }
 
-export const CreateResultModal = ({ projectId, subjectId, onSuccess }: CreateResultModalProps) => {
+export const CreateResultModal = ({ projectId, onSuccess }: CreateResultModalProps) => {
     const { closeModal } = useModal();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -36,12 +35,12 @@ export const CreateResultModal = ({ projectId, subjectId, onSuccess }: CreateRes
         setError("");
 
         try {
-            await ResultsAPI.create(description.trim(), title.trim(), subjectId, new Date(deadline));
+            await ResultsAPI.create(description.trim(), title.trim(), projectId, new Date(deadline));
             setTitle("");
             setDescription("");
             setDeadline("");
             closeModal();
-            if (onSuccess) onSuccess();
+            onSuccess();
         } catch (err: any) {
             setError(err.message || "Ошибка при создании результата");
         } finally {

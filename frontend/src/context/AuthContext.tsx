@@ -15,18 +15,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
   const [accessToken, setAccessToken] = useState(getAccessToken());
 
+  const refreshAccessToken = async () => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) throw new Error("No refresh token");
+    
+    const response = await AuthAPI.refresh(refreshToken);
+    setTokens(response);
+    setAccessToken(response.accessToken);
+    setIsLoggedIn(true);
+  };
+
   useEffect(() => {
     // Set up interceptor for auto-refresh on 401
     const originalFetch = window.fetch;
+    let isRefreshing = false;
+    
     window.fetch = async (...args) => {
       let response = await originalFetch(...args);
       
-      if (response.status === 401 && isLoggedIn) {
+      if ((response.status === 401 || response.status === 403) && isLoggedIn && !isRefreshing) {
         try {
+          isRefreshing = true;
           await refreshAccessToken();
           response = await originalFetch(...args);
         } catch {
           handleLogout();
+        } finally {
+          isRefreshing = false;
         }
       }
       
@@ -38,15 +53,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [isLoggedIn]);
 
-  const refreshAccessToken = async () => {
-    const refreshToken = getRefreshToken();
-    if (!refreshToken) throw new Error("No refresh token");
-    
-    const response = await AuthAPI.refresh(refreshToken);
-    setTokens(response);
-    setAccessToken(response.accessToken);
-  };
-
   const handleLogout = () => {
     clearTokens();
     setIsLoggedIn(false);
@@ -56,7 +62,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthContextType = {
     isLoggedIn,
     accessToken,
-    login: () => setIsLoggedIn(true),
+    login: () => {
+      // read token from storage and mark logged in
+      setAccessToken(getAccessToken());
+      setIsLoggedIn(true);
+    },
     logout: handleLogout,
     refreshAccessToken,
   };

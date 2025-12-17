@@ -1,21 +1,23 @@
 export interface User {
-  id: string
-  name: string
+  id: number | string
+  displayName: string
   email?: string
 }
 
 export interface Result {
-  id: string
+  id: number | string
   title: string
   description?: string
-  dueDate?: string
+  deadline?: string
+  status?: "COMPLETED" | "IN_PROGRESS" | "CREATED" | string
   results?: Result[]
-  dependencies?: string[] // result ids that must be completed before this
-  assignees?: string[]
+  dependentIds?: (number | string)[] // result ids that depend on this
+  codependentIds?: (number | string)[] // result ids that this depends on
+  assignedUsers?: User[]
 }
 
 export interface Project {
-  id: string
+  id: number | string
   name: string
   subject?: string
   results?: Result[]

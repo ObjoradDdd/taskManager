@@ -12,14 +12,16 @@ export async function api(path: string, options: RequestInit = {}) {
     defaultHeaders["Authorization"] = `Bearer ${accessToken}`;
   }
 
-  const res = await fetch(`/api/v1${path}`, {
-    credentials: "include",
+  const fullUrl = `/api/v1${path}`;
+  const requestInit = {
     headers: {
       ...defaultHeaders,
       ...(options.headers as Record<string, string> | undefined),
     },
     ...options,
-  });
+  };
+
+  const res = await fetch(fullUrl, requestInit);
 
   if (!res.ok) {
     const txt = await res.text();

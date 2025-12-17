@@ -8,7 +8,7 @@ import { CreateProjectModal } from "../../components/Modal/CreateProjectModal";
 import { EditProjectModal } from "../../components/Modal/EditProjectModal";
 import { LeaveProjectModal } from "../../components/Modal/LeaveProjectModal";
 
-interface Project { id: number; title: string; deadline: string; status: string; }
+interface Project { id: number; title: string; deadline: string;}
 
 
 export default function SubjectPage() {
@@ -48,21 +48,19 @@ export default function SubjectPage() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <div>
               <Link to={`/subjects/${subjectId}/projects/${p.id}`}>{p.title}</Link>
-              <p>Дедлайн: {p.deadline}</p>
-              <p>Статус: {p.status}</p>
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={() =>
                   openModal(<LeaveProjectModal projectTitle={p.title} projectId={p.id} onSuccess={loadProjects} />)
                 }
-                style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
+                style={{ background: "#4dff00ff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
               >
-                Edit
+                Leave
               </button>
               <button
                 onClick={() =>
-                  openModal(<EditProjectModal id={p.id} title={p.title} deadline={p.deadline} onSuccess={loadProjects} />)
+                  openModal(<EditProjectModal id={p.id} title={p.title} onSuccess={loadProjects} />)
                 }
                 style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
               >

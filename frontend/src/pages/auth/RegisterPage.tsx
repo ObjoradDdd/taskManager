@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthAPI, setTokens } from "../../api/auth";
+import { useAuth } from "../../context/AuthContext";
 import "../../styles/common.css";
 
 export default function RegisterPage() {
@@ -11,6 +12,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +30,8 @@ export default function RegisterPage() {
       // Automatically login after successful registration
       const response = await AuthAPI.login({ userName: email, password });
       setTokens(response);
-      navigate("/subjects");
+  login();
+      navigate("/admin_subjects");
     } catch (err: any) {
       setError(err.message || "Registration failed");
     } finally {

@@ -22,16 +22,11 @@ export const CreateProjectModal = ({ subjectId, onSuccess }: CreateProjectModalP
             setError("Название не может быть пустым");
             return;
         }
-        if (!deadline) {
-            setError("Дедлайн не может быть пустым");
-            return;
-        }
-
         setLoading(true);
         setError("");
 
         try {
-            await ProjectsAPI.create(title.trim(), subjectId, new Date(deadline));
+            await ProjectsAPI.create(title.trim(), subjectId);
             setTitle("");
             setDeadline("");
             closeModal();
@@ -54,14 +49,6 @@ export const CreateProjectModal = ({ subjectId, onSuccess }: CreateProjectModalP
                         className="input"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        disabled={loading}
-                    />
-                    <input
-                        type="date"
-                        placeholder="Дедлайн"
-                        className="input"
-                        value={deadline}
-                        onChange={(e) => setDeadline(e.target.value)}
                         disabled={loading}
                     />
                     <button className="btn btn-primary" disabled={loading}>

@@ -3,7 +3,7 @@ import { useModal } from "./ModalProvider";
 import { BaseModal } from "./BaseModal";
 import { ProjectsAPI } from "../../api/projects";
 
-export const InviteUserToProjectModal = ({ subjectId }: { subjectId: string }) => {
+export const InviteUserToProjectModal = ({ projectId }: { projectId: string }) => {
     const { closeModal } = useModal();
     const [email, setEmail] = useState("");
     const [emails, setEmails] = useState<string[]>([]);
@@ -66,7 +66,7 @@ export const InviteUserToProjectModal = ({ subjectId }: { subjectId: string }) =
         }
 
         try {
-            await ProjectsAPI.addUsers(subjectId, emails);
+            await ProjectsAPI.addUsers(projectId, emails);
             closeModal();
         } catch (err) {
             setError("Ошибка при приглашении студентов");

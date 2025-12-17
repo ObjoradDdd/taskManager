@@ -1,16 +1,14 @@
 import { api } from "./client";
 export const ProjectsAPI = {
   list: (subjectId: string) => api(`/project/${subjectId}/projects`),
-  create: (title: string, subjectId: string, deadline: Date) =>
+  create: (title: string, subjectId: string) =>
     api("/project", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, subjectId, deadline}),
+      body: JSON.stringify({ title, subjectId}),
     }),
   update: (id: string, data: { title?: string, deadline?: Date}) =>
     api(`/project/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     }),
   delete: (id: string) =>
@@ -24,7 +22,6 @@ export const ProjectsAPI = {
   addUsers: (projectId: string, userEmails: string[]) =>
     api(`/project/${projectId}/users`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ emails : userEmails }),
     }),
 };

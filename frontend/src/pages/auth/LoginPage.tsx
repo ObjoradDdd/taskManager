@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthAPI, setTokens } from "../../api/auth";
+import { useAuth } from "../../context/AuthContext";
 import "../../styles/common.css";
 
 export default function LoginPage() {
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +20,9 @@ export default function LoginPage() {
     try {
       const response = await AuthAPI.login({ userName, password });
       setTokens(response);
-      navigate("/subjects");
+      // inform AuthContext that user is logged in and update accessToken state
+      login();
+      navigate("/admin_subjects");
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {

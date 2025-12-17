@@ -11,7 +11,7 @@ interface ResultModalProps {
 
 export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
     const { closeModal } = useModal();
-    const [status, setStatus] = useState("pending");
+    const [status, setStatus] = useState(result.status || "CREATED");
     const [selectedDependency, setSelectedDependency] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -80,6 +80,25 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
         }
     };
 
+    const handleUnassign = async () => {
+        setLoading(true);
+        setError("");
+        setMessage("");
+
+        try {
+            await ResultsAPI.unassign(String(result.id));
+            setMessage("Вы больше не ответственны за результат");
+            setTimeout(() => {
+                onSuccess();
+                closeModal();
+            }, 1000);
+        } catch (err: any) {
+            setError(err.message || "Ошибка");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <BaseModal title={`Результат: ${result.title}`}>
             <div className="container" style={{ maxWidth: "500px", margin: "20px auto" }}>
@@ -91,10 +110,10 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                     <h3 style={{ marginTop: 0 }}>Статус результата</h3>
                     <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                         <button
-                            onClick={() => handleChangeStatus("in_progress")}
+                            onClick={() => handleChangeStatus("IN_PROGRESS")}
                             disabled={loading}
                             style={{
-                                background: status === "in_progress" ? "#ffc107" : "#6c757d",
+                                background: status === "IN_PROGRESS" ? "#ffc107" : "#6c757d",
                                 color: "white",
                                 border: "none",
                                 padding: "8px 12px",
@@ -106,10 +125,10 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                             В процессе
                         </button>
                         <button
-                            onClick={() => handleChangeStatus("completed")}
+                            onClick={() => handleChangeStatus("COMPLETED")}
                             disabled={loading}
                             style={{
-                                background: status === "completed" ? "#28a745" : "#6c757d",
+                                background: status === "COMPLETED" ? "#28a745" : "#6c757d",
                                 color: "white",
                                 border: "none",
                                 padding: "8px 12px",
@@ -121,10 +140,10 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                             Завершено
                         </button>
                         <button
-                            onClick={() => handleChangeStatus("created")}
+                            onClick={() => handleChangeStatus("CREATED")}
                             disabled={loading}
                             style={{
-                                background: status === "created" ? "#3540dcff" : "#6c757d",
+                                background: status === "CREATED" ? "#3540dcff" : "#6c757d",
                                 color: "white",
                                 border: "none",
                                 padding: "8px 12px",
@@ -139,13 +158,30 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                 </div>
 
 
+                {/* Ответственные */}
+                <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "4px" }}>
+                    <h3 style={{ marginTop: 0 }}>Ответственные</h3>
+                    {result.assignedUsers && result.assignedUsers.length > 0 ? (
+                        <ul style={{ margin: "10px 0", paddingLeft: "20px" }}>
+                            {result.assignedUsers.map(user => (
+                                <li key={user.id} style={{ marginBottom: "5px" }}>
+                                  {user.displayName} {user.email && `(${user.email})`}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p style={{ color: "#6c757d", margin: "10px 0" }}>Нет ответственных</p>
+                    )}
+                </div>
+
                 <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "4px" }}>
                     <h3 style={{ marginTop: 0 }}>Зависимости</h3>
-                    <p>Этот результат зависит от:</p>
-                    {result.dependencies && result.dependencies.length > 0 ? (
+                    
+                    <p style={{ marginTop: "15px" }}>Результаты, от которых зависит этот:</p>
+                    {result.codependentIds && result.codependentIds.length > 0 ? (
                         <ul>
-                            {result.dependencies.map(dep => (
-                                <li key={dep}>{dep}</li>
+                            {result.codependentIds.map(id => (
+                                <li key={id}>{id}</li>
                             ))}
                         </ul>
                     ) : (
@@ -187,40 +223,42 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
 
 
                 <div style={{ padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "4px" }}>
-                    <h3 style={{ marginTop: 0 }}>Стать ответственным</h3>
-                    <button
-                        onClick={handleAssign}
-                        disabled={loading}
-                        style={{
-                            background: "#28a745",
-                            color: "white",
-                            border: "none",
-                            padding: "10px 15px",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            width: "100%",
-                            fontSize: "14px"
-                        }}
-                    >
-                        {loading ? "Делаем вас ответственным..." : "Стать ответственным"}
-                    </button>
+                    <h3 style={{ marginTop: 0 }}>Назначение</h3>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                        <button
+                            onClick={handleAssign}
+                            disabled={loading}
+                            style={{
+                                background: "#28a745",
+                                color: "white",
+                                border: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                flex: 1,
+                                fontSize: "14px"
+                            }}
+                        >
+                            {loading ? "Делаем вас ответственным..." : "Стать ответственным"}
+                        </button>
+                        <button
+                            onClick={handleUnassign}
+                            disabled={loading}
+                            style={{
+                                background: "#dc3545",
+                                color: "white",
+                                border: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                flex: 1,
+                                fontSize: "14px"
+                            }}
+                        >
+                            {loading ? "Отказываемся..." : "Отказаться"}
+                        </button>
+                    </div>
                 </div>
-
-                <button
-                    onClick={closeModal}
-                    style={{
-                        marginTop: "20px",
-                        background: "#6c757d",
-                        color: "white",
-                        border: "none",
-                        padding: "10px 15px",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        width: "100%"
-                    }}
-                >
-                    Закрыть
-                </button>
             </div>
         </BaseModal>
     );

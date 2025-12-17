@@ -5,13 +5,11 @@ export const SubjectsAPI = {
   create: (title: string) =>
     api("/subject", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title }),
     }),
   update: (id: string, data: { title?: string }) =>
     api(`/subject/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     }),
   delete: (id: string) =>
@@ -25,7 +23,6 @@ export const SubjectsAPI = {
   addUsers: (subjectId: string, userEmails: string[]) =>
     api(`/subject/${subjectId}/users`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ emails : userEmails }),
     }),
 };

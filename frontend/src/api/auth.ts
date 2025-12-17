@@ -42,6 +42,10 @@ export const AuthAPI = {
     method: "POST",
     body: JSON.stringify({ refreshToken }),
   }),
+
+  me: () => api("/auth/me", {
+    method: "GET",
+  }),
 };
 
 // Token storage utilities

@@ -30,26 +30,31 @@ export default function MemberSubjectsListPage() {
 
     return (
         <div className="container">
-            <button
-                onClick={() =>
-                    openModal(<CreateSubjectModal onSuccess={loadSubjects} />)
-                }
-            >
-                Create Subject
-            </button>
             <h1>Предметы</h1>
             {subjects.map((s) => (
                 <div key={s.id} className="card">
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <Link to={`/subjects/${s.id}`}>{s.title}</Link>
-                        <button
-                            onClick={() =>
-                                openModal(<LeaveSubjectModal subjectTitle={s.title} isAdmin={false} subjectId={s.id} onSuccess={loadSubjects} />)
-                            }
-                            style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
-                        >
-                            Edit
-                        </button>
+                        <div style={{ display: "flex", gap: "10px" }}>
+                            <button
+                                onClick={() =>
+                                    openModal(<LeaveSubjectModal subjectTitle={s.title} isAdmin={false} subjectId={s.id} onSuccess={loadSubjects} />)
+                                }
+                                style={{ background: "#4dff00ff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
+                            >
+                                Leave
+                            </button>
+
+                            <button
+                                onClick={() =>
+                                    openModal(<EditSubjectModal id={s.id} title={s.title} onSuccess={loadSubjects} />)
+                                }
+                                style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
+                            >
+                                Edit
+                            </button>
+
+                        </div>
                     </div>
                 </div>
             ))}

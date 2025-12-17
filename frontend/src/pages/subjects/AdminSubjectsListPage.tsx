@@ -59,9 +59,9 @@ export default function  AdminSubjectsListPage() {
                                     onClick={() =>
                                         openModal(<LeaveSubjectModal subjectTitle={s.title} isAdmin={true} subjectId={s.id} onSuccess={loadSubjects} />)
                                     }
-                                    style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
+                                    style={{ background: "#4dff00ff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
                                 >
-                                    Edit
+                                    Leave
                                 </button>
 
                                 <button
