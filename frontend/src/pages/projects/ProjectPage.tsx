@@ -40,31 +40,57 @@ export default function ProjectPage() {
       {results.map((r) => (
         <div key={r.id} className="card">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
+            <div style={{ flex: 1 }}>
               <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                 <h3 style={{ marginTop: 0, cursor: "pointer", color: "#007bff" }} onClick={() => openModal(<ResultModal result={r} onSuccess={loadResults} />)}>
                   {r.title}
                 </h3>
                 <span style={{ fontSize: "12px", color: "#999", fontWeight: "normal" }}>(ID: {r.id})</span>
+                {/* status badge */}
+                {r.status && (
+                  <span style={{ marginLeft: "8px", padding: "3px 8px", borderRadius: "12px", background: r.status === "DONE" ? "#28a745" : r.status === "IN_PROGRESS" ? "#ffc107" : "#6c757d", color: "white", fontSize: "12px" }}>{r.status}</span>
+                )}
               </div>
               <p style={{ color: "#666", marginBottom: "5px" }}>{r.description}</p>
-              <p style={{ marginBottom: "0" }}>Дедлайн: {r.deadline ? new Date(r.deadline).toLocaleDateString("ru-RU") : "Не указан"}</p>
+              <p style={{ marginBottom: "5px" }}>Дедлайн: {r.deadline ? new Date(r.deadline).toLocaleDateString("ru-RU") : "Не указан"}</p>
+
+              {/* Assigned users */}
+              <div style={{ marginBottom: "8px" }}>
+                <strong>Ответственные:</strong>
+                {r.assignedUsers && r.assignedUsers.length > 0 ? (
+                  <span style={{ marginLeft: "8px", color: "#333" }}>{r.assignedUsers.map(u => u.displayName).join(', ')}</span>
+                ) : (
+                  <span style={{ marginLeft: "8px", color: "#6c757d" }}>Нет</span>
+                )}
+              </div>
+
+              {/* Dependencies */}
+              <div style={{ marginBottom: "8px" }}>
+                <strong>Зависит от:</strong>
+                {r.codependentIds && r.codependentIds.length > 0 ? (
+                  <span style={{ marginLeft: "8px", color: "#333" }}>{r.codependentIds.join(', ')}</span>
+                ) : (
+                  <span style={{ marginLeft: "8px", color: "#6c757d" }}>Нет</span>
+                )}
+              </div>
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
-              <button
-                onClick={() =>
-                  openModal(<EditResultModal result={r} onSuccess={loadResults} />)
-                }
-                style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(r.id)}
-                style={{ background: "#dc3545", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
-              >
-                Delete
-              </button>
+            <div style={{ display: "flex", gap: "8px", flexDirection: "column", minWidth: "140px" }}>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  onClick={() => openModal(<EditResultModal result={r} onSuccess={loadResults} />)}
+                  style={{ background: "#007bff", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(r.id)}
+                  style={{ background: "#dc3545", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
+                >
+                  Delete
+                </button>
+              </div>
+
+              {/* only edit/delete buttons shown */}
             </div>
           </div>
         </div>
