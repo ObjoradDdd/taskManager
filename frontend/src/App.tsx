@@ -28,28 +28,43 @@ export default function App() {
   return (
     <ModalProvider>
       <BrowserRouter>
-      <Layout>
         <Routes>
-          {/* AUTH */}
+
+          {/* AUTH (NO LAYOUT) */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
           {/* PAGES WITH LAYOUT */}
-            <Route path="/admin_subjects" element={<ProtectedRoute><AdminSubjectsListPage /> </ProtectedRoute>}/>
-            <Route path="/member_subjects" element={<ProtectedRoute><MemberSubjectsListPage /> </ProtectedRoute>}/>
+          <Route element={<Layout />}>
+            <Route
+              path="/admin_subjects"
+              element={
+                <ProtectedRoute>
+                  <AdminSubjectsListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/member_subjects"
+              element={
+                <ProtectedRoute>
+                  <MemberSubjectsListPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/subjects/:subjectId" element={<SubjectPage />} />
             <Route
               path="/subjects/:subjectId/projects/:projectId"
               element={<ProjectPage />}
             />
-          
+          </Route>
 
           {/* DEFAULT */}
           <Route path="*" element={<Navigate to="/admin_subjects" replace />} />
         </Routes>
-        </Layout>
       </BrowserRouter>
     </ModalProvider>
   );
 }
+
 

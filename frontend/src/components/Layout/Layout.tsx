@@ -1,13 +1,12 @@
-import { ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./layout.css";
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout() {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     logout();
     navigate("/login");
   };
@@ -30,8 +29,10 @@ export default function Layout({ children }: { children: ReactNode }) {
           )}
         </div>
       </nav>
-      <div className="layout-container">{children}</div>
+
+      <div className="layout-container">
+        <Outlet />
+      </div>
     </div>
   );
 }
-
