@@ -10,12 +10,22 @@ export const InviteUserToSubjectModal = ({ subjectId }: { subjectId: string }) =
     const [error, setError] = useState("");
 
     const addEmail = () => {
-        if (!email.trim()) return;
-        if (emails.includes(email.trim())) {
+        const trimmed = email.trim();
+        if (!trimmed) return;
+
+        // Проверка формата email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(trimmed)) {
+            setError("Неверный формат email");
+            return;
+        }
+
+        if (emails.includes(trimmed)) {
             setError("Email уже добавлен");
             return;
         }
-        setEmails([...emails, email.trim()]);
+
+        setEmails([...emails, trimmed]);
         setEmail("");
         setError("");
     };
@@ -72,6 +82,7 @@ export const InviteUserToSubjectModal = ({ subjectId }: { subjectId: string }) =
                     <input
                         placeholder="student@email.com"
                         value={email}
+                        type="email"
                         onChange={e => setEmail(e.target.value)}
                         onKeyDown={e => e.key === "Enter" && addEmail()}
                         style={{
