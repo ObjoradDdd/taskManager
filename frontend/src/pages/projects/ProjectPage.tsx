@@ -8,6 +8,7 @@ import { EditResultModal } from "../../components/Modal/EditResultModal";
 import { ResultModal } from "../../components/Modal/ResultModal";
 import { Result } from "../../types";
 import { InviteUserToProjectModal } from "../../components/Modal/InviteUserToProjectModal";
+import { DeleteModal } from "../../components/Modal/DeleteModal";
 
 export default function ProjectPage() {
   const { subjectId, projectId } = useParams();
@@ -34,15 +35,15 @@ export default function ProjectPage() {
 
   return (
     <div className="container">
-      <button onClick={() => openModal(<InviteUserToProjectModal projectId={projectId!} />)}>Invite User</button>
-      <button onClick={() => openModal(<CreateResultModal projectId={projectId!} onSuccess={loadResults} />)}>Create Result</button>
+      <button className="invite-button" onClick={() => openModal(<InviteUserToProjectModal projectId={projectId!} />)}>Invite User</button>
+      <button className="create-button" onClick={() => openModal(<CreateResultModal projectId={projectId!} onSuccess={loadResults} />)}>Create Result</button>
       <h1>Результаты</h1>
       {results.map((r) => (
         <div key={r.id} className="card">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <h3 style={{ marginTop: 0, cursor: "pointer", color: "#007bff" }} onClick={() => openModal(<ResultModal result={r} onSuccess={loadResults} />)}>
+                <h3 style={{ marginTop: 0, cursor: "pointer", color: "#007bff" }}>
                   {r.title}
                 </h3>
                 <span style={{ fontSize: "12px", color: "#999", fontWeight: "normal" }}>(ID: {r.id})</span>
@@ -77,13 +78,26 @@ export default function ProjectPage() {
             <div style={{ display: "flex", gap: "8px", flexDirection: "column", minWidth: "140px" }}>
               <div style={{ display: "flex", gap: "8px" }}>
                 <button
-                  onClick={() => openModal(<EditResultModal result={r} onSuccess={loadResults} />)}
-                  style={{ background: "#007bff", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
+                  onClick={() => openModal(<ResultModal result={r} onSuccess={loadResults} />)}
+                  style={{ background: "#4dff00ff", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(r.id)}
+                  onClick={() => openModal(<EditResultModal result={r} onSuccess={loadResults} />)}
+                  style={{ background: "#007bff", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
+                >
+                  Edit metadata
+                </button>
+                <button
+                  onClick={() => openModal(
+                    <DeleteModal
+                      itemName={r.title}
+                      itemType="Результат"
+                      onSuccess={loadResults}
+                      onConfirm={async () => await ResultsAPI.delete(r.id.toString())}
+                    />
+                  )}
                   style={{ background: "#dc3545", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
                 >
                   Delete

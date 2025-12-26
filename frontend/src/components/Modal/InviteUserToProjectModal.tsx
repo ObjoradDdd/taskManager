@@ -33,7 +33,7 @@ export const InviteUserToProjectModal = ({ projectId }: { projectId: string }) =
             try {
                 const text = event.target?.result as string;
                 const data = JSON.parse(text);
-                
+
                 let loadedEmails: string[] = [];
                 if (Array.isArray(data)) {
                     // Если это массив
@@ -76,17 +76,38 @@ export const InviteUserToProjectModal = ({ projectId }: { projectId: string }) =
     return (
         <BaseModal title="Добавить студентов в проект">
             {error && <div style={{ color: "#dc3545", marginBottom: "10px" }}>{error}</div>}
-            
+
             <div style={{ marginBottom: "15px" }}>
                 <h4>Добавить email вручную:</h4>
-                <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+                <div style={{ display: "flex", gap: "6px", marginBottom: "10px" }}>
                     <input
                         placeholder="student@email.com"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && addEmail()}
+                        onKeyDown={e => e.key === "Enter" && addEmail()}
+                        style={{
+                            flex: 1,
+                            padding: "8px",
+                            borderRadius: "4px",
+                            border: "1px solid #ccc",
+                            outline: "none",
+                            fontSize: "14px"
+                        }}
                     />
-                    <button onClick={addEmail}>Add</button>
+                    <button
+                        onClick={addEmail}
+                        style={{
+                            padding: "8px 12px",
+                            background: "#6c757d",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "14px"
+                        }}
+                    >
+                        Add
+                    </button>
                 </div>
 
                 <h4>Загрузить JSON файл:</h4>
@@ -94,17 +115,26 @@ export const InviteUserToProjectModal = ({ projectId }: { projectId: string }) =
                     type="file"
                     accept=".json"
                     onChange={handleFileUpload}
-                    style={{ marginBottom: "10px" }}
+                    style={{
+                        padding: "6px",
+                        borderRadius: "4px",
+                        border: "1px solid #ccc",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        width: "100%",
+                        marginBottom: "10px"
+                    }}
                 />
                 <p style={{ fontSize: "12px", color: "#666" }}>
                     JSON может быть: массив строк ["email1@.com", "email2@.com"] или объект с свойством emails
                 </p>
             </div>
 
+
             <h4>Добавленные студенты ({emails.length}):</h4>
-            <div style={{ 
-                maxHeight: "200px", 
-                overflowY: "auto", 
+            <div style={{
+                maxHeight: "200px",
+                overflowY: "auto",
                 marginBottom: "15px",
                 border: "1px solid #ccc",
                 padding: "10px",
@@ -141,7 +171,7 @@ export const InviteUserToProjectModal = ({ projectId }: { projectId: string }) =
                 )}
             </div>
 
-            <button 
+            <button
                 onClick={submit}
                 style={{
                     background: "#28a745",

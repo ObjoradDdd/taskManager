@@ -6,12 +6,13 @@ import { CreateSubjectModal } from "../../components/Modal/CreateSubjectModal";
 import { EditSubjectModal } from "../../components/Modal/EditSubjectModal";
 import { useModal } from "../../components/Modal/ModalProvider";
 import { LeaveSubjectModal } from "../../components/Modal/LeaveSubjectModal";
+import { DeleteModal } from "../../components/Modal/DeleteModal";
 
 
 interface Subject { id: number; title: string; role?: string; }
 
 
-export default function  AdminSubjectsListPage() {
+export default function AdminSubjectsListPage() {
     const { openModal } = useModal();
     const [subjects, setSubjects] = useState<Subject[]>([]);
 
@@ -40,7 +41,7 @@ export default function  AdminSubjectsListPage() {
 
     return (
         <div className="container">
-            <button
+            <button className="create-button"
                 onClick={() =>
                     openModal(<CreateSubjectModal onSuccess={loadSubjects} />)
                 }
@@ -57,15 +58,6 @@ export default function  AdminSubjectsListPage() {
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <button
                                     onClick={() =>
-                                        openModal(<LeaveSubjectModal subjectTitle={s.title} isAdmin={true} subjectId={s.id} onSuccess={loadSubjects} />)
-                                    }
-                                    style={{ background: "#4dff00ff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
-                                >
-                                    Leave
-                                </button>
-
-                                <button
-                                    onClick={() =>
                                         openModal(<EditSubjectModal id={s.id} title={s.title} onSuccess={loadSubjects} />)
                                     }
                                     style={{ background: "#007bff", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
@@ -74,8 +66,15 @@ export default function  AdminSubjectsListPage() {
                                 </button>
 
                                 <button
-                                    onClick={() => handleDelete(s.id)}
-                                    style={{ background: "#dc3545", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
+                                    onClick={() => openModal(
+                                        <DeleteModal
+                                            itemName={s.title}
+                                            itemType="Предмет"
+                                            onSuccess={loadSubjects}
+                                            onConfirm={async () => await SubjectsAPI.delete(s.id.toString())}
+                                        />
+                                    )}
+                                    style={{ background: "#dc3545", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
                                 >
                                     Delete
                                 </button>

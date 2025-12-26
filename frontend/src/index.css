@@ -61,3 +61,21 @@ body {
   border-radius: 8px;
   min-width: 300px;
 }
+
+.create-button {
+  background: #4dff00ff;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.invite-button {
+  background: #007bff;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

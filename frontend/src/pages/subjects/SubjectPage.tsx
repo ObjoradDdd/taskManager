@@ -7,8 +7,9 @@ import { InviteUserToSubjectModal } from "../../components/Modal/InviteUserToSub
 import { CreateProjectModal } from "../../components/Modal/CreateProjectModal";
 import { EditProjectModal } from "../../components/Modal/EditProjectModal";
 import { LeaveProjectModal } from "../../components/Modal/LeaveProjectModal";
+import { DeleteModal } from "../../components/Modal/DeleteModal";
 
-interface Project { id: number; title: string; deadline: string;}
+interface Project { id: number; title: string; deadline: string; }
 
 
 export default function SubjectPage() {
@@ -40,8 +41,8 @@ export default function SubjectPage() {
 
   return (
     <div className="container">
-      <button onClick={() => openModal(<InviteUserToSubjectModal subjectId={subjectId!} />)}>Invite User</button>
-      <button onClick={() => openModal(<CreateProjectModal subjectId={subjectId!} onSuccess={loadProjects} />)}>Create Project</button>
+      <button className="invite-button" onClick={() => openModal(<InviteUserToSubjectModal subjectId={subjectId!} />)}>Invite User</button>
+      <button className="create-button" onClick={() => openModal(<CreateProjectModal subjectId={subjectId!} onSuccess={loadProjects} />)}>Create Project</button>
       <h1>Проекты</h1>
       {projects.map((p) => (
         <div key={p.id} className="card">
@@ -67,8 +68,15 @@ export default function SubjectPage() {
                 Edit
               </button>
               <button
-                onClick={() => handleDelete(p.id)}
-                style={{ background: "#dc3545", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer" }}
+                onClick={() => openModal(
+                  <DeleteModal
+                    itemName={p.title}
+                    itemType="Прoeкт"
+                    onSuccess={loadProjects}
+                    onConfirm={async () => await ProjectsAPI.delete(p.id.toString())}
+                  />
+                )}
+                style={{ background: "#dc3545", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer" }}
               >
                 Delete
               </button>

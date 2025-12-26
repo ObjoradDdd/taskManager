@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useModal } from "./ModalProvider";
 import { BaseModal } from "./BaseModal";
 import { ResultsAPI } from "../../api/results";
+import { formatDateDMY } from "../../utils/date";
 
 interface CreateResultModalProps {
   projectId: string;

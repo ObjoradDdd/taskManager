@@ -51,7 +51,7 @@ export default function LoginPage() {
           disabled={loading}
         />
         <button className="btn btn-primary" disabled={loading}>
-          {loading ? "Входа..." : "Войти"}
+          {loading ? "Вход..." : "Войти"}
         </button>
       </form>
       <p style={{ marginTop: "15px", textAlign: "center" }}>

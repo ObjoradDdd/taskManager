@@ -3,6 +3,7 @@ import { useModal } from "./ModalProvider";
 import { BaseModal } from "./BaseModal";
 import { ResultsAPI } from "../../api/results";
 import { Result } from "../../types";
+import { formatDateDMY } from "../../utils/date";
 
 interface EditResultModalProps {
   result: Result;

@@ -28,7 +28,6 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
             setMessage("Статус успешно изменён");
             setTimeout(() => {
                 onSuccess();
-                closeModal();
             }, 1000);
         } catch (err: any) {
             setError(err.message || "Ошибка при изменении статуса");
@@ -71,7 +70,6 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
             setMessage("Вы ответственны за результат");
             setTimeout(() => {
                 onSuccess();
-                closeModal();
             }, 1000);
         } catch (err: any) {
             setError(err.message || "Ошибка");
@@ -90,7 +88,6 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
             setMessage("Вы больше не ответственны за результат");
             setTimeout(() => {
                 onSuccess();
-                closeModal();
             }, 1000);
         } catch (err: any) {
             setError(err.message || "Ошибка");
@@ -122,7 +119,7 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                                 fontSize: "14px"
                             }}
                         >
-                            В процессе
+                            IN_PROGRESS
                         </button>
                         <button
                             onClick={() => handleChangeStatus("COMPLETED")}
@@ -137,7 +134,7 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                                 fontSize: "14px"
                             }}
                         >
-                            Завершено
+                            COMPLETED
                         </button>
                         <button
                             onClick={() => handleChangeStatus("CREATED")}
@@ -152,41 +149,17 @@ export const ResultModal = ({ result, onSuccess }: ResultModalProps) => {
                                 fontSize: "14px"
                             }}
                         >
-                            Созданно
+                            CREATED
                         </button>
                     </div>
                 </div>
 
 
-                {/* Ответственные */}
-                <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "4px" }}>
-                    <h3 style={{ marginTop: 0 }}>Ответственные</h3>
-                    {result.assignedUsers && result.assignedUsers.length > 0 ? (
-                        <ul style={{ margin: "10px 0", paddingLeft: "20px" }}>
-                            {result.assignedUsers.map(user => (
-                                <li key={user.id} style={{ marginBottom: "5px" }}>
-                                  {user.displayName} {user.email && `(${user.email})`}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p style={{ color: "#6c757d", margin: "10px 0" }}>Нет ответственных</p>
-                    )}
-                </div>
+
 
                 <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "4px" }}>
                     <h3 style={{ marginTop: 0 }}>Зависимости</h3>
                     
-                    <p style={{ marginTop: "15px" }}>Результаты, от которых зависит этот:</p>
-                    {result.codependentIds && result.codependentIds.length > 0 ? (
-                        <ul>
-                            {result.codependentIds.map(id => (
-                                <li key={id}>{id}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p style={{ color: "#6c757d" }}>Нет зависимостей</p>
-                    )}
                     <div style={{ marginTop: "10px" }}>
                         <input
                             type="text"
