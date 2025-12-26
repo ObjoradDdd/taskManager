@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ResultsAPI } from "../../api/results";
 import "../../styles/common.css";
 import { useModal } from "../../components/Modal/ModalProvider";
@@ -35,8 +35,11 @@ export default function ProjectPage() {
 
   return (
     <div className="container">
-      <button className="invite-button" onClick={() => openModal(<InviteUserToProjectModal projectId={projectId!} />)}>Invite User</button>
-      <button className="create-button" onClick={() => openModal(<CreateResultModal projectId={projectId!} onSuccess={loadResults} />)}>Create Result</button>
+      <div style={{ display: "flex", gap: "8px"}} >
+        <Link className="back-link" to={`/subjects/${subjectId}`}>Back</Link>
+        <button className="invite-button" onClick={() => openModal(<InviteUserToProjectModal projectId={projectId!} />)}>Invite User</button>
+        <button className="create-button" onClick={() => openModal(<CreateResultModal projectId={projectId!} onSuccess={loadResults} />)}>Create Result</button>
+      </div>
       <h1>Результаты</h1>
       {results.map((r) => (
         <div key={r.id} className="card">

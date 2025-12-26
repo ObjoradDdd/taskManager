@@ -41,8 +41,10 @@ export default function SubjectPage() {
 
   return (
     <div className="container">
-      <button className="invite-button" onClick={() => openModal(<InviteUserToSubjectModal subjectId={subjectId!} />)}>Invite User</button>
-      <button className="create-button" onClick={() => openModal(<CreateProjectModal subjectId={subjectId!} onSuccess={loadProjects} />)}>Create Project</button>
+      <div style={{ display: "flex", gap: "8px" }} >
+        <button className="invite-button" onClick={() => openModal(<InviteUserToSubjectModal subjectId={subjectId!} />)}>Invite User</button>
+        <button className="create-button" onClick={() => openModal(<CreateProjectModal subjectId={subjectId!} onSuccess={loadProjects} />)}>Create Project</button>
+      </div>
       <h1>Проекты</h1>
       {projects.map((p) => (
         <div key={p.id} className="card">

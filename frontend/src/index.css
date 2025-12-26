@@ -79,3 +79,14 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
+
+
+.back-link {
+  background: grey;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
