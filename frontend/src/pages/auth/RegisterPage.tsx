@@ -33,7 +33,7 @@ export default function RegisterPage() {
   login();
       navigate("/admin_subjects");
     } catch (err: any) {
-      setError("Неверный логин или пароль");
+      setError(err.message);
     } finally {
       setLoading(false);
     }

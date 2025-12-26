@@ -23,15 +23,26 @@ export async function api(path: string, options: RequestInit = {}) {
 
   const res = await fetch(fullUrl, requestInit);
 
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(`API ${res.status} ${txt}`);
+  // Parse JSON if possible
+  let data: any = {};
+  try {
+    data = await res.json();
+  } catch (_) {
+    // ignore JSON parse errors
   }
 
-  // Try parse JSON, if it fails — return empty object
-  try {
-    return await res.json();
-  } catch (_) {
-    return {};
+  if (!res.ok) {
+    let errorMsg = data?.error || `Request failed with status ${res.status} popa`;
+
+    const words = errorMsg.trim().split(" ");
+    if (words.length > 1) {
+      words.pop();
+      errorMsg = words.join(" ");
+    } else {
+      errorMsg = "";
+    }
+    throw new Error(errorMsg);
   }
+
+  return data;
 }

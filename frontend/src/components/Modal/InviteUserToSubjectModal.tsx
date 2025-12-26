@@ -31,7 +31,14 @@ export const InviteUserToSubjectModal = ({ subjectId }: { subjectId: string }) =
         }
 
         try {
-            await SubjectsAPI.addUsers(subjectId, emails);
+            const response = await SubjectsAPI.addUsers(subjectId, emails);
+
+            if (response.wrongEmails && response.wrongEmails.length > 0) {
+                setEmails(response.wrongEmails)
+                setError("Не удалось добавить:\n" + response.wrongEmails.join("\n"));
+                return;
+            }
+
             closeModal();
         } catch {
             setError("Ошибка при приглашении студентов");
