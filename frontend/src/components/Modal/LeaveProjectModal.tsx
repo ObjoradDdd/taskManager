@@ -13,8 +13,8 @@ export const LeaveProjectModal = ({
 }) => {
     const { closeModal } = useModal();
 
-    const handleConfirm = () => {
-        ProjectsAPI.leave(projectId.toString());
+    const handleConfirm = async () => {
+        await ProjectsAPI.leave(projectId.toString());
         closeModal();
         onSuccess();
     };
